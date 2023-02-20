@@ -10,3 +10,4 @@ Para poder compilar y ejecutar cada uno de los códigos de manera correcta en RO
  - `roslaunch courseworks courseworks.launch`
  
  Posteriormente  se podrá ejecutaran 3 ventanas, a la que hay que prestarle atención es la ventana de "rqt_graph", aquí es donde se van a desplegar las graficas de las señales resultantes.
+![Signal](https://user-images.githubusercontent.com/70008088/220212843-0b564258-061d-4cf9-8ad9-a7041b4e6afd.png)
