@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+    <rosparam file = "$(find control)/config/system_params.yaml" command = "load"  />
+    <rosparam file = "$(find control)/config/setpoint_params.yaml" command = "load"  />
+    <rosparam file = "$(find control)/config/control_params.yaml" command = "load"  />
+    
+    <node name = "motor_system" pkg = "control" type = "motor_system.py" output = "screen"/>
+    <node name = "set_point_generator" pkg = "control" type = "set_point_generator.py" output = "screen"/>
+    <node name = "controller" pkg = "control" type = "controller.py" output = "screen"/>
+
+    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" output="screen"  args="/motor_output/output /motor_input/input /set_point/output_data"/>
+
+</launch>
