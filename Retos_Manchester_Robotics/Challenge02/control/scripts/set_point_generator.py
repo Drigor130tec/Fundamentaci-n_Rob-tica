@@ -12,7 +12,7 @@ def new_data(_max_power, _min_power, _current_power):
 
         if _current_power < _max_power:
 
-            _current_power = _current_power + 10
+            _current_power = _current_power + 1
                 
         else: 
 
@@ -22,7 +22,7 @@ def new_data(_max_power, _min_power, _current_power):
 
         if _current_power > _min_power:
 
-            _current_power = _current_power - 10
+            _current_power = _current_power - 1
                 
         else:
                     
