@@ -1,4 +1,3 @@
-controller_kp : 1.0
-controller_ki : 0.0
-controller_Kd : 0.0
-controller_current_speed : 0
+controller_ki : -0.015
+controller_kp : 0.48
+controller_kd : 0.015
