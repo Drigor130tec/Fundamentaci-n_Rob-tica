@@ -2,98 +2,135 @@
 import rospy
 import numpy as np
 from control.msg import motor_input, motor_output, set_point
+from std_msgs.msg import Float64
 
-global prev_error, target_speed, controller_current_speed
-
-prev_error = 0
+controller_current_speed = 0
 target_speed = 0
+i = 0.0
 
-def pid_controller(_system_error, _Kp, _Kd, _Ki):
+def pid_controller(_system_error, _prev_error,_Kp, _Kd, _Ki):
 
-    i = 0
+    global i
     dt = 0.01
 
+    # Sistema proporcional
     p = _Kp * _system_error
-    i = _Ki * (i + _system_error * dt)
-    d = _Kd * (_system_error - prev_error) / dt
 
+    # Sistema integral
+    i = _Ki * (i + _system_error * dt)
+
+    # Sistema derivativo
+    d = _Kd * (_system_error - _prev_error) / dt
+
+    # Salidad del sistema PID
     pid_response = p + i + d
 
     return pid_response
 
+# Funcion que simula el estado nulo del motor
 def stop():
 
     global controller_pub
 
-    #Setup the stop message (can be the same as the control message)
+    # Setup the stop message (can be the same as the control message)
     print("Stopping")
 
+    # Creacion y seteo de valores para una variable de tipo "motor_input"
     end_point = motor_input()
+
     end_point.input = 0.0
     end_point.time = rospy.get_time() - start_time
 
+    # Se publica el estado nulo del motor
     controller_pub.publish(end_point)
     
     rospy.loginfo("Total Simulation Time = %f" % end_point.time)
 
 def system_response_callback(msg):
 
-    controller_current_speed = msg.output
-    system_response_time = msg.time
-    system_response_status = msg.status
+    global controller_current_speed
 
-    rospy.loginfo("Time: %f", system_response_time)
-    rospy.loginfo("New Status Recived: %s", system_response_status)
-    print("/n")
+    system_response = msg
+
+    controller_current_speed = system_response.output
+    system_response_time = system_response.time
+    system_response_status = system_response.status
+
+    rospy.loginfo("Motor Time: %f", system_response_time)
+    rospy.loginfo("Motor Speed: %f", controller_current_speed)
+    rospy.loginfo("Motor Status %s", system_response_status)
+    print("\n")
 
 def system_target_callback(msg):
 
-    target_speed = msg.new_target
-    target_time = msg.time
+    global target_speed
+
+    system_target = msg
+    target_speed = system_target.new_target
+    target_time = system_target.time
 
     rospy.loginfo("Time: %f", target_time)
-    rospy.loginfo("New Target Recived: %f", target_speed)
+    rospy.loginfo("New   Recived: %f", target_speed)
     print("/n")
 
 if __name__ == '__main__':
 
-    rospy.init_node("controller", anonymous = True)
-    rate = rospy.Rate(100)
-    rospy.on_shutdown(stop)
-
     try:
+
+        rospy.init_node("controller", anonymous = True)
 
         print("The Controller is Running")
                 
-        controller_pub = rospy.Publisher("motor_input", motor_input, queue_size = 1)
-        setpoint_sub = rospy.Subscriber("set_point", set_point, system_target_callback)
-        system_sub = rospy.Subscriber("motor_output", motor_output, system_response_callback)
+        controller_pub = rospy.Publisher("/motor_input", motor_input, queue_size = 1)
+        error_pub = rospy.Publisher("/sys_error", Float64, queue_size = 1)
 
-        controller_Kp = rospy.get_param("/controller_kp", 1.0)
-        controller_Ki = rospy.get_param("/controller_ki", 0.0)
-        controller_Kd = rospy.get_param("/controller_kd", 0.0)
-        controller_current_speed = rospy.get_param("/controller_current_speed", 0)
+        rate = rospy.Rate(100)
+        
+        rospy.on_shutdown(stop)
+
+        controller_Kp = rospy.get_param("/controller_kp")
+        controller_Ki = rospy.get_param("/controller_ki")
+        controller_Kd = rospy.get_param("/controller_kd")
 
         start_time = rospy.get_time()
 
+        rospy.Subscriber("/set_point", set_point, system_target_callback)
+        rospy.Subscriber("/motor_output", motor_output, system_response_callback)
+
+        prev_error = 0.0
+
         while not rospy.is_shutdown():
 
-            system_error = target_speed - controller_current_speed
+            # Error del sistema
+            system_error = (target_speed - controller_current_speed) * 0.100
 
-            pid_output = pid_controller(system_error, controller_Kp, controller_Ki, controller_Kd)
+            print("System Error: ", system_error)
+            print("Target Speed: ", target_speed)
+            print("Current_Speed: ", controller_current_speed)
+            print("\n")
 
+            # Respuesta del controlador PID
+            pid_output = pid_controller(system_error, prev_error, controller_Kp, controller_Ki, controller_Kd)
+
+            # Time Stamp de cuando entra el 
             pid_time = rospy.get_time() - start_time
 
+            # Creacion y seteo de valores a una variable de tipo "motor_input"
             new_target = motor_input()
-            new_target.input = pid_output
+
             new_target.time = pid_time
+            new_target.input = pid_output
 
-            prev_error = system_error
+            print("Nueva señal de salida: ", new_target.input)
 
+            # Se almacena el error previo
+            prev_error = prev_error + system_error
+
+            # Se publica el nuevo target del controlador
+            error_pub.publish(system_error)
             controller_pub.publish(new_target)
 
             rate.sleep()
 
     except rospy.ROSInitException:
         pass
-
