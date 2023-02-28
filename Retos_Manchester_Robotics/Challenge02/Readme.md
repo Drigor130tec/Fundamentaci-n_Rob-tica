@@ -1,9 +1,10 @@
-
-#Instrucciones para descargar y compilar el paquete "control"
+# Instrucciones para descargar y compilar el paquete "control"
 
 Estas instrucciones le guiarán a través del proceso de descarga y compilación de un paquete de ROS. 
 
-###Descargar el paquete
+![test](https://user-images.githubusercontent.com/70008088/221771260-f24578bc-f235-4159-a4a6-52d2823fe390.png)
+
+### Descargar el paquete
 Abra una terminal y vaya al directorio src de su espacio de trabajo de ROS:
 
 	cd ~/catkin_ws/src
@@ -12,7 +13,7 @@ Clone el repositorio que contiene el paquete que desea descargar:
 
 	git clone https://github.com/Drigor130tec/Fundamentaci-n_Rob-tica/tree/main/Retos_Manchester_Robotics/Challenge02
 
-###Compilar el paquete
+### Compilar el paquete
 
  Regrese al directorio raíz de su espacio de trabajo de ROS:
 
@@ -26,7 +27,7 @@ Asegúrese de que su espacio de trabajo se haya creado correctamente:
 
 	source devel/setup.bash
 
-###  Ejecutar el paquete
+### Ejecutar el paquete
 Ejecute el nodo que desea ejecutar. Por ejemplo, si el paquete contiene un nodo llamado my_node:
 
 	roslaunch control motor_control.launch
