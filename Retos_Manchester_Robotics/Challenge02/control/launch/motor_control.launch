@@ -10,6 +10,6 @@
     <node name = "set_point_generator" pkg = "control" type = "set_point_generator.py" output = "screen"/>
     <node name = "controller" pkg = "control" type = "controller.py" output = "screen"/>
 
-    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" output="screen"  args="/motor_output/output /motor_input/input /set_point/output_data"/>
+    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" output="screen"  args="/motor_output/output /set_point/new_target /sys_error"/>
 
 </launch>
