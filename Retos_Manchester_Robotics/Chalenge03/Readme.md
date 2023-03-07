@@ -31,7 +31,7 @@ Asegúrese de que su espacio de trabajo se haya creado correctamente:
 ### Ejecutar el paquete
 Ejecute el nodo que desea ejecutar. Por ejemplo, si el paquete contiene un nodo llamado my_node:
 
-	roslaunch control motor_control.launch
+	roslaunch chalenge03 motor.launch
 
 Si todo sale bien, este es el resultado que deberias de obetener
 
