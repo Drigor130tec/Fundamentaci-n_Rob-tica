@@ -2,7 +2,8 @@
 
 Estas instrucciones le guiarán a través del proceso de descarga y compilación de un paquete de ROS. 
 
-![test](https://user-images.githubusercontent.com/70008088/221771260-f24578bc-f235-4159-a4a6-52d2823fe390.png)
+
+![reto](https://user-images.githubusercontent.com/70008088/223325948-b3e972aa-e67c-4b1c-bbfe-f8eb321d0b4f.jpg)
 
 ### Descargar el paquete
 Abra una terminal y vaya al directorio src de su espacio de trabajo de ROS:
@@ -11,7 +12,7 @@ Abra una terminal y vaya al directorio src de su espacio de trabajo de ROS:
 
 Clone el repositorio que contiene el paquete que desea descargar:
 
-	git clone https://github.com/Drigor130tec/Fundamentaci-n_Rob-tica/tree/main/Retos_Manchester_Robotics/Challenge02
+	git clone https://github.com/Drigor130tec/Fundamentaci-n_Rob-tica/tree/main/Retos_Manchester_Robotics/Chalenge03
 
 ### Compilar el paquete
 
@@ -32,8 +33,10 @@ Ejecute el nodo que desea ejecutar. Por ejemplo, si el paquete contiene un nodo 
 
 	roslaunch control motor_control.launch
 
-Si todo sale bien se deberia de desplegar la herramienta rqt_plot
+Si todo sale bien, este es el resultado que deberias de obetener
 
-![graphh](https://user-images.githubusercontent.com/70008088/221770987-b20601d5-0f52-47c3-b23f-6f2d71b7b3a2.png)
+
+https://user-images.githubusercontent.com/70008088/223326050-6df6cddb-eab5-4be8-8b4b-64c2b8ac7525.mp4
+
 
 
