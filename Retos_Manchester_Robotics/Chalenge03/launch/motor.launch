@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <rosparam file = "$(find arduino_motor)/config/params.yaml" command = "load"  />
+
+    <node name="Input" pkg="arduino_motor" type="Input.py" output="screen"/>
+
+    <node name="motor" pkg="rosserial_python" type="serial_node.py">
+        <param name="port"	type="string"	value="/dev/ttyACM0"/>   
+    </node>
+
+    <node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" output="screen"  args="/cmd_pwm" />
+    
+</launch>
